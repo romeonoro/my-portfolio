@@ -50,4 +50,42 @@ document.addEventListener('DOMContentLoaded', () => {
             techTags.style.transform = 'translateY(5px)';
         });
     });
+
+    // Typing Animation for "Noro" and "Guterres"
+    const typingNameElement = document.querySelector('.typing-name');
+    const names = ['Noro', 'Guterres'];
+    let currentNameIndex = 0;
+    let currentCharIndex = 0;
+    let isDeleting = false;
+
+    function type() {
+        const currentName = names[currentNameIndex];
+        const textToShow = currentName.substring(0, currentCharIndex);
+
+        typingNameElement.textContent = textToShow;
+
+        if (!isDeleting && currentCharIndex < currentName.length) {
+            // Digitação: adiciona o próximo caractere
+            currentCharIndex++;
+            setTimeout(type, 150); // Velocidade de digitação
+        } else if (isDeleting && currentCharIndex > 0) {
+            // Deleção: remove o último caractere
+            currentCharIndex--;
+            setTimeout(type, 100); // Velocidade de deleção
+        } else if (!isDeleting && currentCharIndex === currentName.length) {
+            // Pausa após completar a digitação
+            setTimeout(() => {
+                isDeleting = true;
+                type();
+            }, 2000); // Pausa de 2 segundos
+        } else if (isDeleting && currentCharIndex === 0) {
+            // Troca para o próximo nome após deletar tudo
+            isDeleting = false;
+            currentNameIndex = (currentNameIndex + 1) % names.length;
+            setTimeout(type, 500); // Pequena pausa antes de começar a digitar o próximo nome
+        }
+    }
+
+    // Inicia a animação
+    type();
 });
